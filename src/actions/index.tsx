@@ -1,1 +1,2 @@
-export const GET_USERS = 'getUsers';
+export const GET_USERLIST = 'GET_USERLIST';
+export const SET_USERLIST = 'SET_USERLIST';

@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import { IState, IUserList } from '../../interface/interface';
+import * as actionTypes from '../../actions'
 
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
@@ -67,7 +68,7 @@ const UserManagement: React.FC = (props: any) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {props.userlist.map((user: IUserList) => (
+                        {(props.users || []).map((user: IUserList) => (
                             <StyledTableRow key={user.id}>
                                 <StyledTableCell component="th" scope="user">
                                     {user.firstname}
@@ -88,14 +89,15 @@ const UserManagement: React.FC = (props: any) => {
 }
 
 const mapStateToProps = (state: IState) => {
+    console.log(state);
     return {
-        userlist: state.users
+        users: state.users
     }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        LoadUserData: () => dispatch({ type: 'LOAD_USERLIST' })
+        LoadUserData: () => dispatch({ type: actionTypes.GET_USERLIST })
     }
 }
 
