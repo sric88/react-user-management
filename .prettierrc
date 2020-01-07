@@ -1,0 +1,17 @@
+{
+    "printWidth": 100,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "useTabs": false,
+    "arrowParens": "always",
+    "trailingComma": "es5",
+    "semi": true,
+    "newline-before-return": true,
+    "no-duplicate-variable": [
+        true,
+        "check-parameters"
+    ],
+    "no-var-keyword": true,
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false
+}
