@@ -1,0 +1,22 @@
+[
+    {
+        "firstname": "Dell",
+        "lastname": "EMC",
+        "id": "5223323", 
+        "email": "dell@hcl.com",
+        "DOB": "2019-04-28T14:45:15",
+        "gender": "male",
+        "isadmin": true,
+        "businessunit": "Administrator"
+    },
+    {
+        "firstname": "Dell1212",
+        "lastname": "EMC2121",
+        "id": "5223324", 
+        "email": "dell@hcl121.com",
+        "DOB": "2019-04-28T14:45:15",
+        "gender": "female",
+        "isadmin": false,
+        "businessunit": "Administrator1212"
+    }
+]
