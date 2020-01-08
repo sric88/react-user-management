@@ -1,11 +1,12 @@
 import React from 'react';
+import UserManagement from '../../containers/UserManagement/UserManagement';
+import '../../assets/Layout.scss';
 
 const Layout: React.FC = (props: any) => {
     return (
         <React.Fragment>
-            <div>Toolbar, Backdrop</div>
             <main>
-                {props.children}
+                <UserManagement />
             </main>
         </React.Fragment>
     )
