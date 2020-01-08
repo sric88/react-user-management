@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import Button from '@material-ui/core/Button';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,6 +12,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { IState, IUserList } from '../../interface/interface';
 import * as actionTypes from '../../actions'
+import FormDialog from '../FormDialog/FormDialog';
 
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
@@ -53,7 +53,7 @@ const UserManagement: React.FC = (props: any) => {
 
     return (
         <React.Fragment>
-            <Button variant="outlined" color="primary">Add Users</Button>
+            <FormDialog />
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="customized table">
                     <TableHead>
