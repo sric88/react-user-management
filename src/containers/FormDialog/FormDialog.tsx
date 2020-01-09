@@ -18,26 +18,28 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 
 import '../../assets/Layout.scss';
+import { IUser } from '../../interface/interface';
 
 interface FormProps {
     children?: React.ReactNode;
-    onAddUser: Function
+    onAddUser: Function;
+    onClose: Function;
+    open: boolean;
+    dataToEdit: IUser;
 }
 
 const FormDialog: React.FC<FormProps> = (props) => {
-    const [open, setOpen] = React.useState(false);
-
-    const [enteredFN, setenteredFN] = React.useState('');
-    const [enteredLN, setenteredLN] = React.useState('');
-    const [enteredEmail, setenteredEmail] = React.useState('');
-    const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
-    const [enteredGender, setenteredGender] = React.useState('male');
-    const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: true });
-
-    const [selectedbusinessunit, setselectedbusinessunit] = React.useState('IT Admin');
-
-    const handleClickOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const { onClose, open, dataToEdit } = props;
+    console.log(dataToEdit);
+    const [enteredFN, setenteredFN] = React.useState(props.dataToEdit['firstname']);
+    const [enteredLN, setenteredLN] = React.useState(dataToEdit['lastname']);
+    const [enteredEmail, setenteredEmail] = React.useState(dataToEdit['email']);
+    // const [id] = React.useState(dataToEdit.id);
+    const id = dataToEdit.id;
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(dataToEdit['dob']);
+    const [enteredGender, setenteredGender] = React.useState(dataToEdit['gender']);
+    const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: dataToEdit['isadmin'] });
+    const [selectedbusinessunit, setselectedbusinessunit] = React.useState(dataToEdit['businessunit']);
 
     const handleDateChange = (date: Date | null) => {
         setSelectedDate(date);
@@ -56,13 +58,12 @@ const FormDialog: React.FC<FormProps> = (props) => {
     };
 
     const submitHandler = () => {
-        setOpen(false);
         props.onAddUser(
             {
                 firstname: enteredFN,
                 lastname: enteredLN,
                 email: enteredEmail,
-                id: Math.floor(Math.random() * 10000).toString(),
+                id: id,
                 dob: selectedDate,
                 gender: enteredGender,
                 isAdmin: selectedIsAdmin.checkedA,
@@ -70,13 +71,14 @@ const FormDialog: React.FC<FormProps> = (props) => {
             });
     };
 
+    const handleClose = () => {
+        onClose();
+    };
+
     return (
         <div>
-            <Button className="add-user-btn" variant="outlined" color="primary" onClick={handleClickOpen}>
-                Add User
-            </Button>
-            <Dialog maxWidth="lg" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title" className="form-dialog-title">Add User</DialogTitle>
+            <Dialog maxWidth="lg" open={open} onClose={handleClose}>
+                <DialogTitle id="form-dialog-title" className="form-dialog-title">{!dataToEdit.id ? 'Add' : 'Edit'} User</DialogTitle>
                 <DialogContent>
                     <form>
                         <div className="form-control">
@@ -136,8 +138,8 @@ const FormDialog: React.FC<FormProps> = (props) => {
                         <div className="form-control">
                             <FormLabel component="legend">Gender</FormLabel>
                             <RadioGroup aria-label="gender" name="gender" id="gender" value={enteredGender} onChange={handleChange}>
-                                <FormControlLabel value="female" control={<Radio />} label="Female" />
                                 <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                <FormControlLabel value="female" control={<Radio />} label="Female" />
                                 <FormControlLabel value="other" control={<Radio />} label="Other" />
                             </RadioGroup>
                         </div>
