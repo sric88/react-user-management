@@ -9,7 +9,7 @@ export interface IUser {
     email: String;
     dob: Date;
     formattedDate?: String;
-    gender?: String;
-    isadmin?: Boolean,
-    businessunit?: String;
+    gender: String;
+    isadmin: Boolean,
+    businessunit: String;
 }

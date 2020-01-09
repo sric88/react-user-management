@@ -7,12 +7,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DateFnsUtils from "@date-io/date-fns";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-// import Radio from '@material-ui/core/Radio';
-// import RadioGroup from '@material-ui/core/RadioGroup';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import { FormLabel, Checkbox, MenuItem } from '@material-ui/core';
-// import Select from '@material-ui/core/Select';
-// import InputLabel from '@material-ui/core/InputLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { FormLabel } from '@material-ui/core';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import Switch from '@material-ui/core/Switch';
+import MenuItem from '@material-ui/core/MenuItem';
+
 
 import '../../assets/Layout.scss';
 
@@ -28,8 +31,10 @@ const FormDialog: React.FC<FormProps> = (props) => {
     const [enteredLN, setenteredLN] = React.useState('');
     const [enteredEmail, setenteredEmail] = React.useState('');
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
-    // const [enteredGender, setenteredGender] = React.useState('male');
-    // const [enteredAge, setenteredAge] = React.useState('');
+    const [enteredGender, setenteredGender] = React.useState('male');
+    const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: true });
+
+    const [selectedbusinessunit, setselectedbusinessunit] = React.useState('IT Admin');
 
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -38,13 +43,17 @@ const FormDialog: React.FC<FormProps> = (props) => {
         setSelectedDate(date);
     };
 
-    // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setValue((event.target as HTMLInputElement).value);
-    // };
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setenteredGender((event.target as HTMLInputElement).value);
+    };
 
-    // const selectHandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    //     setAge(event.target.value as string);
-    // };
+    const handleIsAdminChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        setselectedIsAdmin({ ...selectedIsAdmin, [name]: event.target.checked });
+    };
+
+    const selectBusinessChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setselectedbusinessunit(event.target.value as string);
+    };
 
     const submitHandler = () => {
         setOpen(false);
@@ -54,7 +63,10 @@ const FormDialog: React.FC<FormProps> = (props) => {
                 lastname: enteredLN,
                 email: enteredEmail,
                 id: Math.floor(Math.random() * 10000).toString(),
-                dob: selectedDate
+                dob: selectedDate,
+                gender: enteredGender,
+                isAdmin: selectedIsAdmin.checkedA,
+                businessunit: selectedbusinessunit
             });
     };
 
@@ -63,89 +75,105 @@ const FormDialog: React.FC<FormProps> = (props) => {
             <Button className="add-user-btn" variant="outlined" color="primary" onClick={handleClickOpen}>
                 Add User
             </Button>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add User</DialogTitle>
-
+            <Dialog maxWidth="lg" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title" className="form-dialog-title">Add User</DialogTitle>
                 <DialogContent>
                     <form>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="firstname"
-                            label="First Name"
-                            type="text"
-                            fullWidth
-                            value={enteredFN}
-                            onChange={event => {
-                                setenteredFN(event.target.value);
-                            }}
-                        />
-                        <TextField
-                            margin="dense"
-                            id="lastname"
-                            label="Last Name"
-                            type="text"
-                            fullWidth
-                            value={enteredLN}
-                            onChange={event => {
-                                setenteredLN(event.target.value);
-                            }}
-                        />
-                        <TextField
-                            margin="dense"
-                            id="email"
-                            label="Email"
-                            type="email"
-                            fullWidth
-                            value={enteredEmail}
-                            onChange={event => {
-                                setenteredEmail(event.target.value);
-                            }}
-                        />
-
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                disableToolbar
-                                variant="inline"
-                                format="dd/MM/yyyy"
-                                margin="normal"
-                                id="dob"
-                                label="Date picker inline"
-                                value={selectedDate}
-                                onChange={handleDateChange}
+                        <div className="form-control">
+                            <TextField
+                                fullWidth
+                                autoFocus
+                                id="firstname"
+                                label="First Name"
+                                type="text"
+                                value={enteredFN}
+                                onChange={event => {
+                                    setenteredFN(event.target.value);
+                                }}
                             />
-                        </MuiPickersUtilsProvider>
 
-                        {/* <FormLabel component="legend">Gender</FormLabel>
-                        <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-                            <FormControlLabel value="female" control={<Radio />} label="Female" />
-                            <FormControlLabel value="male" control={<Radio />} label="Male" />
-                            <FormControlLabel value="other" control={<Radio />} label="Other" />
-                        </RadioGroup>
+                        </div>
+                        <div className="form-control">
+                            <TextField
+                                fullWidth
+                                id="lastname"
+                                label="Last Name"
+                                type="text"
+                                value={enteredLN}
+                                onChange={event => {
+                                    setenteredLN(event.target.value);
+                                }}
+                            />
 
-                        <FormControlLabel
-                            value="true"
-                            control={<Checkbox color="primary" />}
-                            label="Is Admin"
-                            labelPlacement="end"
-                        />
+                        </div>
+                        <div className="form-control">
+                            <TextField
+                                fullWidth
+                                id="email"
+                                label="Email"
+                                type="email"
+                                value={enteredEmail}
+                                onChange={event => {
+                                    setenteredEmail(event.target.value);
+                                }}
+                            />
+                        </div>
 
-                        <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={age}
-                            onChange={selectHandleChange}
-                        >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                        </Select> */}
+                        <div className="form-control">
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    fullWidth
+                                    disableToolbar
+                                    variant="inline"
+                                    format="dd/MM/yyyy"
+                                    id="dob"
+                                    label="Date picker inline"
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                />
+                            </MuiPickersUtilsProvider>
+                        </div>
+                        <div className="form-control">
+                            <FormLabel component="legend">Gender</FormLabel>
+                            <RadioGroup aria-label="gender" name="gender" id="gender" value={enteredGender} onChange={handleChange}>
+                                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                <FormControlLabel value="other" control={<Radio />} label="Other" />
+                            </RadioGroup>
+                        </div>
 
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">Cancel</Button>
-                            <Button onClick={submitHandler} color="primary">Save and Close</Button>
-                        </DialogActions>
+                        <div className="form-control">
+                            <FormLabel component="legend">Is Admin</FormLabel>
+                            <Switch
+                                checked={selectedIsAdmin.checkedA}
+                                onChange={handleIsAdminChange('checkedA')}
+                                value="selectedIsAdmin.checkedA"
+                                id="isAdmin"
+                            />
+                        </div>
+
+                        <div className="form-control">
+                            <InputLabel id="demo-simple-select-label">Select Business Unit</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                fullWidth
+                                id="businessunit"
+                                value={selectedbusinessunit}
+                                onChange={selectBusinessChange}
+                            >
+                                <MenuItem value={"IT Admin"}>IT Admin</MenuItem>
+                                <MenuItem value={"Finance"}>Finance</MenuItem>
+                                <MenuItem value={"Development"}>Development</MenuItem>
+                            </Select>
+                        </div>
+
+                        <div className="button-wrap">
+                            <DialogActions>
+                                <Button variant="contained" onClick={handleClose}>Cancel</Button>
+                                <Button variant="contained" onClick={submitHandler} color="primary">Save and close</Button>
+                            </DialogActions>
+                        </div>
+
                     </form>
 
                 </DialogContent>

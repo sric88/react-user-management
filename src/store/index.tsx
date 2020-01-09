@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import rootReducer from '../reducer';
-import { getUserSaga, postUserSaga } from '../sagas/usersaga';
+import { getUserSaga, postUserSaga, deleteUserSaga } from '../sagas/usersaga';
 
 export const getStore = () => {
     const initialState = {};
@@ -10,5 +10,6 @@ export const getStore = () => {
     const store = createStore(rootReducer, initialState, applyMiddleware(sagaMiddleware));
     sagaMiddleware.run(getUserSaga);
     sagaMiddleware.run(postUserSaga);
+    sagaMiddleware.run(deleteUserSaga);
     return store;
 }
