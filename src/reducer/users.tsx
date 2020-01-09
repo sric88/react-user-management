@@ -1,11 +1,10 @@
-// import { IState } from "../interface/interface";
 import * as actionTypes from '../actions';
-import { IUserList } from '../interface/interface';
+import { IUser } from '../interface/interface';
 
-const reducer = (state: Array<IUserList> = [], action: any) => {
+const reducer = (state: Array<IUser> = [], action: any) => {
     switch (action.type) {
-        case actionTypes.SET_USERLIST:
-            return [...action.value];
+        case actionTypes.MERGE_USERLIST: return [...state, ...action.value];
+        case actionTypes.ADD_USERLIST: return [action.value, ...state];
         default: return state;
     }
 }

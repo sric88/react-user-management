@@ -1,14 +1,15 @@
 export interface IState {
-    users: Array<IUserList>;
+    users: Array<IUser>;
 }
 
-export interface IUserList {
+export interface IUser {
     firstname: String;
     lastname: String;
-    id: number;
+    id?: number;
     email: String;
-    DOB: String;
-    gender: String;
-    isadmin: Boolean,
-    businessunit: String;
+    dob: Date;
+    formattedDate?: String;
+    gender?: String;
+    isadmin?: Boolean,
+    businessunit?: String;
 }

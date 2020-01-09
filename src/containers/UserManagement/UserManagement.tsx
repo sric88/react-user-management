@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import { IState, IUserList } from '../../interface/interface';
+import { IState, IUser } from '../../interface/interface';
 import * as actionTypes from '../../actions'
 import FormDialog from '../FormDialog/FormDialog';
 
@@ -43,42 +43,55 @@ const useStyles = makeStyles({
     },
 });
 
-const UserManagement: React.FC = (props: any) => {
-    const { LoadUserData } = props
+
+interface UserManagementProps {
+    children?: React.ReactNode;
+    LoadUserData: Function;
+    addUserData: Function;
+    users: Array<IUser>;
+}
+
+const UserManagement: React.FC<UserManagementProps> = (props) => {
+
+    const { LoadUserData } = props;
     useEffect(() => {
         LoadUserData();
     }, [LoadUserData]);
 
     const classes = useStyles();
 
+    const addUserHandler = (user: IUser) => {
+        props.addUserData(user);
+    }
+
     return (
         <React.Fragment>
-            <FormDialog />
+            <FormDialog onAddUser={addUserHandler}></FormDialog>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>First Name</StyledTableCell>
-                            <StyledTableCell>Last Name</StyledTableCell>
-                            <StyledTableCell>Email</StyledTableCell>
-                            <StyledTableCell>DOB</StyledTableCell>
-                            <StyledTableCell>Gender</StyledTableCell>
-                            <StyledTableCell>Is Admin</StyledTableCell>
-                            <StyledTableCell>Business Unit</StyledTableCell>
+                            <StyledTableCell><div>First Name</div></StyledTableCell>
+                            <StyledTableCell><div>Last Name</div></StyledTableCell>
+                            <StyledTableCell><div>Email</div></StyledTableCell>
+                            <StyledTableCell><div>DOB</div></StyledTableCell>
+                            <StyledTableCell><div>Gender</div></StyledTableCell>
+                            <StyledTableCell><div>Is Admin</div></StyledTableCell>
+                            <StyledTableCell><div>Business Unit</div></StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {(props.users || []).map((user: IUserList) => (
+                        {(props.users || []).map((user: IUser) => (
                             <StyledTableRow key={user.id}>
                                 <StyledTableCell component="th" scope="user">
-                                    {user.firstname}
+                                    <div>{user.firstname}</div>
                                 </StyledTableCell>
-                                <StyledTableCell>{user.lastname}</StyledTableCell>
-                                <StyledTableCell>{user.email}</StyledTableCell>
-                                <StyledTableCell>{user.DOB}</StyledTableCell>
-                                <StyledTableCell>{user.gender}</StyledTableCell>
-                                <StyledTableCell>{user.isadmin}</StyledTableCell>
-                                <StyledTableCell>{user.businessunit}</StyledTableCell>
+                                <StyledTableCell><div>{user.lastname}</div></StyledTableCell>
+                                <StyledTableCell><div>{user.email}</div></StyledTableCell>
+                                <StyledTableCell><div>{user.formattedDate}</div></StyledTableCell>
+                                <StyledTableCell><div>{user.gender}</div></StyledTableCell>
+                                <StyledTableCell><div>{user.isadmin}</div></StyledTableCell>
+                                <StyledTableCell><div>{user.businessunit}</div></StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
@@ -89,7 +102,6 @@ const UserManagement: React.FC = (props: any) => {
 }
 
 const mapStateToProps = (state: IState) => {
-    console.log(state);
     return {
         users: state.users
     }
@@ -97,7 +109,8 @@ const mapStateToProps = (state: IState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        LoadUserData: () => dispatch({ type: actionTypes.GET_USERLIST })
+        LoadUserData: () => dispatch({ type: actionTypes.GET_USERLIST }),
+        addUserData: (userInfo: IUser) => dispatch({ type: actionTypes.POST_USERLIST, payload: userInfo })
     }
 }
 
