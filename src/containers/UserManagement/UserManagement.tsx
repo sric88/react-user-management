@@ -15,6 +15,7 @@ import * as actionTypes from '../../actions'
 import FormDialog from '../FormDialog/FormDialog';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Button from '@material-ui/core/Button';
 
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
@@ -51,6 +52,7 @@ interface UserManagementProps {
     LoadUserData: Function;
     addUserData: Function;
     deleteUserData: Function;
+    editUserData: Function;
     users: Array<IUser>;
 }
 
@@ -63,21 +65,51 @@ const UserManagement: React.FC<UserManagementProps> = (props) => {
 
     const classes = useStyles();
 
+    const [dataToEdit, setdataToEdit] = React.useState({
+        firstname: '',
+        lastname: '',
+        email: '',
+        dob: new Date(),
+        gender: "male",
+        isadmin: false,
+        businessunit: 'IT Admin'
+    });
+
     const addUserHandler = (user: IUser) => {
-        props.addUserData(user);
+        !user.id ? props.addUserData(user) : props.editUserData(user);
+        setOpen(false);
     }
 
     const onEditUser = (user: IUser) => {
-        console.log(user);
+        setdataToEdit(user);
+        setOpen(true);
     }
 
     const onDeleteUser = (user: IUser) => {
         props.deleteUserData(user);
     }
 
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setdataToEdit({
+            firstname: '',
+            lastname: '',
+            email: '',
+            dob: new Date(),
+            gender: "male",
+            isadmin: false,
+            businessunit: 'IT Admin'
+        });
+        setOpen(true);
+    };
+    const handleClose = () => setOpen(false);
+
     return (
         <React.Fragment>
-            <FormDialog onAddUser={addUserHandler}></FormDialog>
+            <Button className="add-user-btn" variant="outlined" color="primary" onClick={handleClickOpen}>
+                Add User
+            </Button>
+            <FormDialog onAddUser={addUserHandler} onClose={handleClose} open={open} dataToEdit={dataToEdit}></FormDialog>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="customized table">
                     <TableHead>
@@ -129,7 +161,8 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         LoadUserData: () => dispatch({ type: actionTypes.GET_USERLIST }),
         addUserData: (userInfo: IUser) => dispatch({ type: actionTypes.POST_USERLIST, payload: userInfo }),
-        deleteUserData: (userInfo: IUser) => dispatch({ type: actionTypes.DELETE_USERLIST, payload: userInfo })
+        deleteUserData: (userInfo: IUser) => dispatch({ type: actionTypes.DELETE_USERLIST, payload: userInfo }),
+        editUserData: (userInfo: IUser) => dispatch({ type: actionTypes.PUT_USERLIST, payload: userInfo })
     }
 }
 

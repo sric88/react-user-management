@@ -3,13 +3,13 @@ export interface IState {
 }
 
 export interface IUser {
-    firstname: String;
-    lastname: String;
+    firstname: string;
+    lastname: string;
     id?: number;
-    email: String;
+    email: string;
     dob: Date;
-    formattedDate?: String;
-    gender: String;
-    isadmin: Boolean,
-    businessunit: String;
+    formattedDate?: string;
+    gender: string;
+    isadmin: boolean,
+    businessunit: string;
 }
