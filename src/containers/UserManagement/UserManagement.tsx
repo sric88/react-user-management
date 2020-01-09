@@ -13,6 +13,8 @@ import Paper from '@material-ui/core/Paper';
 import { IState, IUser } from '../../interface/interface';
 import * as actionTypes from '../../actions'
 import FormDialog from '../FormDialog/FormDialog';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
@@ -48,6 +50,7 @@ interface UserManagementProps {
     children?: React.ReactNode;
     LoadUserData: Function;
     addUserData: Function;
+    deleteUserData: Function;
     users: Array<IUser>;
 }
 
@@ -64,6 +67,14 @@ const UserManagement: React.FC<UserManagementProps> = (props) => {
         props.addUserData(user);
     }
 
+    const onEditUser = (user: IUser) => {
+        console.log(user);
+    }
+
+    const onDeleteUser = (user: IUser) => {
+        props.deleteUserData(user);
+    }
+
     return (
         <React.Fragment>
             <FormDialog onAddUser={addUserHandler}></FormDialog>
@@ -78,6 +89,7 @@ const UserManagement: React.FC<UserManagementProps> = (props) => {
                             <StyledTableCell><div>Gender</div></StyledTableCell>
                             <StyledTableCell><div>Is Admin</div></StyledTableCell>
                             <StyledTableCell><div>Business Unit</div></StyledTableCell>
+                            <StyledTableCell><div>Actions</div></StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -90,8 +102,14 @@ const UserManagement: React.FC<UserManagementProps> = (props) => {
                                 <StyledTableCell><div>{user.email}</div></StyledTableCell>
                                 <StyledTableCell><div>{user.formattedDate}</div></StyledTableCell>
                                 <StyledTableCell><div>{user.gender}</div></StyledTableCell>
-                                <StyledTableCell><div>{user.isadmin}</div></StyledTableCell>
+                                <StyledTableCell><div>{user.isadmin ? "true" : "false"}</div></StyledTableCell>
                                 <StyledTableCell><div>{user.businessunit}</div></StyledTableCell>
+                                <StyledTableCell>
+                                    <div className="action">
+                                        <span onClick={() => onEditUser(user)}><EditIcon fontSize="small" /></span>
+                                        <span onClick={() => onDeleteUser(user)}><DeleteIcon fontSize="small" /></span>
+                                    </div>
+                                </StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
@@ -110,7 +128,8 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         LoadUserData: () => dispatch({ type: actionTypes.GET_USERLIST }),
-        addUserData: (userInfo: IUser) => dispatch({ type: actionTypes.POST_USERLIST, payload: userInfo })
+        addUserData: (userInfo: IUser) => dispatch({ type: actionTypes.POST_USERLIST, payload: userInfo }),
+        deleteUserData: (userInfo: IUser) => dispatch({ type: actionTypes.DELETE_USERLIST, payload: userInfo })
     }
 }
 

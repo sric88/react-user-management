@@ -17,6 +17,10 @@ export const postUserSaga = function* () {
     yield takeEvery(actionTypes.POST_USERLIST, workerPostUser);
 }
 
+export const deleteUserSaga = function* () {
+    yield takeEvery(actionTypes.DELETE_USERLIST, workerDeleteUser);
+}
+
 
 function* workerGetUsers() {
     try {
@@ -42,6 +46,19 @@ function* workerPostUser(action: IPostAction) {
         console.log(action.payload);
         action.payload['formattedDate'] = format(action.payload['dob'], 'dd/MM/yyyyy');
         yield put({ type: actionTypes.ADD_USERLIST, value: action.payload });
+    }
+    catch {
+        console.log('Failed');
+    }
+}
+
+function* workerDeleteUser(action: IPostAction) {
+    console.log('Delete a user');
+    try {
+        // const uri = 'https://jsonplaceholder.typicode.com/users';
+        // const result = yield call(Axios.delete, uri, action.payload.id);
+        console.log(action.payload);
+        yield put({ type: actionTypes.REMOVE_USERLIST, value: action.payload.id });
     }
     catch {
         console.log('Failed');
