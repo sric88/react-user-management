@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -30,20 +30,27 @@ interface FormProps {
 
 const FormDialog: React.FC<FormProps> = (props) => {
     const { onClose, open, dataToEdit } = props;
-    console.log(dataToEdit);
-    const [enteredFN, setenteredFN] = React.useState(dataToEdit['firstname']);
-    const [enteredLN, setenteredLN] = React.useState(dataToEdit['lastname']);
-    const [enteredEmail, setenteredEmail] = React.useState(dataToEdit['email']);
-    // const [id] = React.useState(dataToEdit.id);
-    const id = dataToEdit.id;
-    const [selectedDate, setSelectedDate] = React.useState<Date | null>(dataToEdit['DOB']);
-    const [enteredGender, setenteredGender] = React.useState(dataToEdit['gender']);
-    const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: dataToEdit['isadmin'] });
-    const [selectedbusinessunit, setselectedbusinessunit] = React.useState(dataToEdit['businessunit']);
+    const [enteredFN, setenteredFN] = React.useState('');
+    const [enteredLN, setenteredLN] = React.useState('');
+    const [enteredEmail, setenteredEmail] = React.useState('');
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
+    const [enteredGender, setenteredGender] = React.useState('male');
+    const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: true });
+    const [selectedbusinessunit, setselectedbusinessunit] = React.useState('IT Admin');
 
     const handleDateChange = (date: Date | null) => {
         setSelectedDate(date);
     };
+
+    useEffect(() => {
+        setenteredFN(dataToEdit['firstname']);
+        setenteredLN(dataToEdit['lastname']);
+        setenteredEmail(dataToEdit['email']);
+        setSelectedDate(dataToEdit['DOB']);
+        setenteredGender(dataToEdit['gender']);
+        setselectedIsAdmin({ checkedA: true });
+        setselectedbusinessunit(dataToEdit['businessunit']);
+    }, [dataToEdit])
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setenteredGender((event.target as HTMLInputElement).value);
@@ -63,7 +70,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                 firstname: enteredFN,
                 lastname: enteredLN,
                 email: enteredEmail,
-                id: id,
+                id: dataToEdit.id,
                 DOB: selectedDate,
                 gender: enteredGender,
                 isAdmin: selectedIsAdmin.checkedA,
