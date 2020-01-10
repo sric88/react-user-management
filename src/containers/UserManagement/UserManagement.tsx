@@ -69,7 +69,7 @@ const UserManagement: React.FC<UserManagementProps> = (props) => {
         firstname: '',
         lastname: '',
         email: '',
-        dob: new Date(),
+        DOB: new Date(),
         gender: "male",
         isadmin: false,
         businessunit: 'IT Admin'
@@ -91,15 +91,7 @@ const UserManagement: React.FC<UserManagementProps> = (props) => {
 
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
-        setdataToEdit({
-            firstname: '',
-            lastname: '',
-            email: '',
-            dob: new Date(),
-            gender: "male",
-            isadmin: false,
-            businessunit: 'IT Admin'
-        });
+        setdataToEdit({ ...dataToEdit });
         setOpen(true);
     };
     const handleClose = () => setOpen(false);

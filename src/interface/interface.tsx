@@ -7,7 +7,7 @@ export interface IUser {
     lastname: string;
     id?: number;
     email: string;
-    dob: Date;
+    DOB: Date;
     formattedDate?: string;
     gender: string;
     isadmin: boolean,
