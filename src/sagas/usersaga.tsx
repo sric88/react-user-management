@@ -24,16 +24,15 @@ export const editUserSaga = function* () {
     yield takeEvery(actionTypes.PUT_USERLIST, workerPutUser);
 }
 
+const uri = 'http://lp-5cd911d362/Dell%20Demo/api/usermanagement/User';
 
 function* workerGetUsers() {
     try {
-        const uri = 'https://api.jsonbin.io/b/5e144f8c8d761771cc8c92ce/latest';
         const result = yield call(Axios.get, uri);
         console.log(result);
         result['data'].map((item: IUser) => {
-            return item['formattedDate'] = format(new Date(item['dob']), 'dd/MM/yyyy')
+            return item['formattedDate'] = format(new Date(item['DOB']), 'dd/MM/yyyy')
         });
-        console.log(result.data);
         yield put({ type: actionTypes.MERGE_USERLIST, value: result.data });
     }
     catch{
@@ -43,12 +42,9 @@ function* workerGetUsers() {
 
 
 function* workerPostUser(action: IPostAction) {
-    console.log('Adding a user');
     try {
-        // const uri = 'https://jsonplaceholder.typicode.com/users';
-        // const result = yield call(Axios.post, uri, action.payload);
-        console.log(action.payload);
-        action.payload['formattedDate'] = format(action.payload['dob'], 'dd/MM/yyyyy');
+        yield call(Axios.post, uri, action.payload);
+        action.payload['formattedDate'] = format(action.payload['DOB'], 'dd/MM/yyyyy');
         action.payload['id'] = Math.floor(Math.random() * 10000);
         yield put({ type: actionTypes.ADD_USERLIST, value: action.payload });
     }
@@ -57,11 +53,9 @@ function* workerPostUser(action: IPostAction) {
     }
 }
 function* workerDeleteUser(action: IPostAction) {
-    console.log('Delete a user');
+    const deleteUri = `http://lp-5cd911d362/Dell%20Demo/api/usermanagement/User/${action.payload.id}`;
     try {
-        // const uri = 'https://jsonplaceholder.typicode.com/users';
-        // const result = yield call(Axios.delete, uri, action.payload.id);
-        console.log(action.payload);
+        yield call(Axios.delete, deleteUri);
         yield put({ type: actionTypes.REMOVE_USERLIST, value: action.payload.id });
     }
     catch {
@@ -70,12 +64,9 @@ function* workerDeleteUser(action: IPostAction) {
 }
 
 function* workerPutUser(action: IPostAction) {
-    console.log('Adding a user');
     try {
-        // const uri = 'https://jsonplaceholder.typicode.com/users';
-        // const result = yield call(Axios.put, uri, action.payload);
-        console.log(action.payload);
-        action.payload['formattedDate'] = format(action.payload['dob'], 'dd/MM/yyyyy');
+        yield call(Axios.put, uri, action.payload);
+        action.payload['formattedDate'] = format(action.payload['DOB'], 'dd/MM/yyyy');
         yield put({ type: actionTypes.UPDATE_USERLIST, value: action.payload });
     }
     catch {

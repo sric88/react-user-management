@@ -31,12 +31,12 @@ interface FormProps {
 const FormDialog: React.FC<FormProps> = (props) => {
     const { onClose, open, dataToEdit } = props;
     console.log(dataToEdit);
-    const [enteredFN, setenteredFN] = React.useState(props.dataToEdit['firstname']);
+    const [enteredFN, setenteredFN] = React.useState(dataToEdit['firstname']);
     const [enteredLN, setenteredLN] = React.useState(dataToEdit['lastname']);
     const [enteredEmail, setenteredEmail] = React.useState(dataToEdit['email']);
     // const [id] = React.useState(dataToEdit.id);
     const id = dataToEdit.id;
-    const [selectedDate, setSelectedDate] = React.useState<Date | null>(dataToEdit['dob']);
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(dataToEdit['DOB']);
     const [enteredGender, setenteredGender] = React.useState(dataToEdit['gender']);
     const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: dataToEdit['isadmin'] });
     const [selectedbusinessunit, setselectedbusinessunit] = React.useState(dataToEdit['businessunit']);
@@ -64,7 +64,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                 lastname: enteredLN,
                 email: enteredEmail,
                 id: id,
-                dob: selectedDate,
+                DOB: selectedDate,
                 gender: enteredGender,
                 isAdmin: selectedIsAdmin.checkedA,
                 businessunit: selectedbusinessunit
@@ -128,7 +128,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                                     disableToolbar
                                     variant="inline"
                                     format="dd/MM/yyyy"
-                                    id="dob"
+                                    id="DOB"
                                     label="Date picker inline"
                                     value={selectedDate}
                                     onChange={handleDateChange}
