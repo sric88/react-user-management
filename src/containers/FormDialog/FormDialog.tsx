@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -30,19 +30,44 @@ interface FormProps {
 
 const FormDialog: React.FC<FormProps> = (props) => {
     const { onClose, open, dataToEdit } = props;
-    console.log(dataToEdit);
-    const [enteredFN, setenteredFN] = React.useState(dataToEdit['firstname']);
-    const [enteredLN, setenteredLN] = React.useState(dataToEdit['lastname']);
-    const [enteredEmail, setenteredEmail] = React.useState(dataToEdit['email']);
-    // const [id] = React.useState(dataToEdit.id);
-    const id = dataToEdit.id;
-    const [selectedDate, setSelectedDate] = React.useState<Date | null>(dataToEdit['DOB']);
-    const [enteredGender, setenteredGender] = React.useState(dataToEdit['gender']);
-    const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: dataToEdit['isadmin'] });
-    const [selectedbusinessunit, setselectedbusinessunit] = React.useState(dataToEdit['businessunit']);
+    const [enteredFN, setenteredFN] = React.useState('');
+    const [enteredLN, setenteredLN] = React.useState('');
+    const [enteredEmail, setenteredEmail] = React.useState('');
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
+    const [enteredGender, setenteredGender] = React.useState('male');
+    const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: true });
+    const [selectedbusinessunit, setselectedbusinessunit] = React.useState('IT Admin');
+    const [fnameError, setFnameError] = React.useState('');
+    const [lnameError, setLnameError] = React.useState('');
+    const [emailError, setEmailError] = React.useState('');
 
     const handleDateChange = (date: Date | null) => {
         setSelectedDate(date);
+    };
+
+    useEffect(() => {
+        setenteredFN(dataToEdit['firstname']);
+        setenteredLN(dataToEdit['lastname']);
+        setenteredEmail(dataToEdit['email']);
+        setSelectedDate(dataToEdit['DOB']);
+        setenteredGender(dataToEdit['gender']);
+        setselectedIsAdmin({ checkedA: true });
+        setselectedbusinessunit(dataToEdit['businessunit']);
+        setFnameError('');
+    }, [dataToEdit])
+
+    const validateFormData = () => {
+        if (enteredFN.length === 0) {
+            setFnameError("Error");
+            return false;
+        } else if (enteredLN.length === 0) {
+            setLnameError("Error");
+            return false;
+        } else if (enteredEmail.length === 0) {
+            setEmailError("Error");
+            return false;
+        }
+        return true;
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,12 +83,15 @@ const FormDialog: React.FC<FormProps> = (props) => {
     };
 
     const submitHandler = () => {
+        if (!validateFormData()) {
+            return;
+        }
         props.onAddUser(
             {
                 firstname: enteredFN,
                 lastname: enteredLN,
                 email: enteredEmail,
-                id: id,
+                id: dataToEdit.id,
                 DOB: selectedDate,
                 gender: enteredGender,
                 isAdmin: selectedIsAdmin.checkedA,
@@ -92,6 +120,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                                 onChange={event => {
                                     setenteredFN(event.target.value);
                                 }}
+                                error={fnameError === "Error" ? true : false}
                             />
 
                         </div>
@@ -105,6 +134,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                                 onChange={event => {
                                     setenteredLN(event.target.value);
                                 }}
+                                error={lnameError === "Error" ? true : false}
                             />
 
                         </div>
@@ -118,6 +148,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                                 onChange={event => {
                                     setenteredEmail(event.target.value);
                                 }}
+                                error={emailError === "Error" ? true : false}
                             />
                         </div>
 

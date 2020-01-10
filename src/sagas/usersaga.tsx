@@ -30,26 +30,27 @@ function* workerGetUsers() {
     try {
         const result = yield call(Axios.get, uri);
         console.log(result);
+        result.data = result.data === null ? [] : result.data;
         result['data'].map((item: IUser) => {
             return item['formattedDate'] = format(new Date(item['DOB']), 'dd/MM/yyyy')
         });
         yield put({ type: actionTypes.MERGE_USERLIST, value: result.data });
     }
     catch{
-        console.log('Failed');
+        console.log('Get data failed');
     }
 }
 
 
 function* workerPostUser(action: IPostAction) {
     try {
-        yield call(Axios.post, uri, action.payload);
+        const result = yield call(Axios.post, uri, action.payload);
         action.payload['formattedDate'] = format(action.payload['DOB'], 'dd/MM/yyyyy');
-        action.payload['id'] = Math.floor(Math.random() * 10000);
+        action.payload['id'] = result.data;
         yield put({ type: actionTypes.ADD_USERLIST, value: action.payload });
     }
     catch {
-        console.log('Failed');
+        console.log('Post data failed');
     }
 }
 function* workerDeleteUser(action: IPostAction) {
@@ -66,7 +67,7 @@ function* workerDeleteUser(action: IPostAction) {
 function* workerPutUser(action: IPostAction) {
     try {
         yield call(Axios.put, uri, action.payload);
-        action.payload['formattedDate'] = format(action.payload['DOB'], 'dd/MM/yyyy');
+        action.payload['formattedDate'] = format(new Date(action.payload['DOB']), 'dd/MM/yyyy');
         yield put({ type: actionTypes.UPDATE_USERLIST, value: action.payload });
     }
     catch {
