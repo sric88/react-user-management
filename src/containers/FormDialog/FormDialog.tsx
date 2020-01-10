@@ -37,6 +37,9 @@ const FormDialog: React.FC<FormProps> = (props) => {
     const [enteredGender, setenteredGender] = React.useState('male');
     const [selectedIsAdmin, setselectedIsAdmin] = React.useState({ checkedA: true });
     const [selectedbusinessunit, setselectedbusinessunit] = React.useState('IT Admin');
+    const [fnameError, setFnameError] = React.useState('');
+    const [lnameError, setLnameError] = React.useState('');
+    const [emailError, setEmailError] = React.useState('');
 
     const handleDateChange = (date: Date | null) => {
         setSelectedDate(date);
@@ -50,7 +53,22 @@ const FormDialog: React.FC<FormProps> = (props) => {
         setenteredGender(dataToEdit['gender']);
         setselectedIsAdmin({ checkedA: true });
         setselectedbusinessunit(dataToEdit['businessunit']);
+        setFnameError('');
     }, [dataToEdit])
+
+    const validateFormData = () => {
+        if (enteredFN.length === 0) {
+            setFnameError("Error");
+            return false;
+        } else if (enteredLN.length === 0) {
+            setLnameError("Error");
+            return false;
+        } else if (enteredEmail.length === 0) {
+            setEmailError("Error");
+            return false;
+        }
+        return true;
+    };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setenteredGender((event.target as HTMLInputElement).value);
@@ -65,6 +83,9 @@ const FormDialog: React.FC<FormProps> = (props) => {
     };
 
     const submitHandler = () => {
+        if (!validateFormData()) {
+            return;
+        }
         props.onAddUser(
             {
                 firstname: enteredFN,
@@ -99,6 +120,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                                 onChange={event => {
                                     setenteredFN(event.target.value);
                                 }}
+                                error={fnameError === "Error" ? true : false}
                             />
 
                         </div>
@@ -112,6 +134,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                                 onChange={event => {
                                     setenteredLN(event.target.value);
                                 }}
+                                error={lnameError === "Error" ? true : false}
                             />
 
                         </div>
@@ -125,6 +148,7 @@ const FormDialog: React.FC<FormProps> = (props) => {
                                 onChange={event => {
                                     setenteredEmail(event.target.value);
                                 }}
+                                error={emailError === "Error" ? true : false}
                             />
                         </div>
 

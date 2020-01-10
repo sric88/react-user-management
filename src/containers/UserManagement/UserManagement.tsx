@@ -16,6 +16,7 @@ import FormDialog from '../FormDialog/FormDialog';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
+import Switch from '@material-ui/core/Switch';
 
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
@@ -117,25 +118,37 @@ const UserManagement: React.FC<UserManagementProps> = (props) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {(props.users || []).map((user: IUser) => (
-                            <StyledTableRow key={user.id}>
-                                <StyledTableCell component="th" scope="user">
-                                    <div>{user.firstname}</div>
-                                </StyledTableCell>
-                                <StyledTableCell><div>{user.lastname}</div></StyledTableCell>
-                                <StyledTableCell><div>{user.email}</div></StyledTableCell>
-                                <StyledTableCell><div>{user.formattedDate}</div></StyledTableCell>
-                                <StyledTableCell><div>{user.gender}</div></StyledTableCell>
-                                <StyledTableCell><div>{user.isadmin ? "true" : "false"}</div></StyledTableCell>
-                                <StyledTableCell><div>{user.businessunit}</div></StyledTableCell>
-                                <StyledTableCell>
-                                    <div className="action">
-                                        <span onClick={() => onEditUser(user)}><EditIcon fontSize="small" /></span>
-                                        <span onClick={() => onDeleteUser(user)}><DeleteIcon fontSize="small" /></span>
-                                    </div>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
+                        {props.users.length === 0 ?
+                            <StyledTableRow>
+                                <StyledTableCell>No data loaded</StyledTableCell>
+                            </StyledTableRow> :
+                            (props.users || []).map((user: IUser) => (
+                                <StyledTableRow key={user.id}>
+                                    <StyledTableCell component="th" scope="user">
+                                        <div>{user.firstname}</div>
+                                    </StyledTableCell>
+                                    <StyledTableCell><div>{user.lastname}</div></StyledTableCell>
+                                    <StyledTableCell><div>{user.email}</div></StyledTableCell>
+                                    <StyledTableCell><div>{user.formattedDate}</div></StyledTableCell>
+                                    <StyledTableCell><div>{user.gender}</div></StyledTableCell>
+                                    <StyledTableCell><div>
+                                        <Switch
+                                            checked={user.isadmin}
+                                            value="{user.isadmin}"
+                                            id="isAdmin"
+                                            disabled
+                                            color="primary"
+                                        />
+                                    </div></StyledTableCell>
+                                    <StyledTableCell><div>{user.businessunit}</div></StyledTableCell>
+                                    <StyledTableCell>
+                                        <div className="action">
+                                            <span onClick={() => onEditUser(user)}><EditIcon fontSize="small" /></span>
+                                            <span onClick={() => onDeleteUser(user)}><DeleteIcon fontSize="small" /></span>
+                                        </div>
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -30,6 +30,7 @@ function* workerGetUsers() {
     try {
         const result = yield call(Axios.get, uri);
         console.log(result);
+        result.data = result.data === null ? [] : result.data;
         result['data'].map((item: IUser) => {
             return item['formattedDate'] = format(new Date(item['DOB']), 'dd/MM/yyyy')
         });
